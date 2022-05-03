@@ -1,7 +1,86 @@
+<!DOCTYPE html>
 <html>
-  <head><title>SYTC Web Portal</title></head>
-  <body bgcolor="#ffffcc">
-    
-    <p align="center"><b>Radhasoami Dayal ki Daya, Radhasoami Sahai</b></p>
+<head>
+<title>Upload Notes</title>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
+
+<script src="https://use.fontawesome.com/939e9dd52c.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<div class="mainDiv" align="center">
+<h1 align="center">Upload Notes</h1>
+        <hr><br>
+<progress id="uploader" value="0" max="100">0%</progress><br><br>
+<input type="file" id="fileButton" value="upload"/>
+<br><br>
+<button onClick="window.location.reload();" type="button" class="btn btn-default btn-sm">
+          Upload another Note
+        </button>
+</div>
+
+
+
+<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCQd8OOAz8-LApSzc0IStvCOTmY49A3gI8",
+  authDomain: "sytc-50301.firebaseapp.com",
+  projectId: "sytc-50301",
+  storageBucket: "sytc-50301.appspot.com",
+  messagingSenderId: "452201187737",
+  appId: "1:452201187737:web:f8970105673509e33eab08",
+  measurementId: "G-JJ9S88Y6KQ"
+  };
+  firebase.initializeApp(config);
+  //-------------------------------------
+ 
+  var uploader = document.getElementById('uploader');
+  var fileButton =         document.getElementById('fileButton');
+  fileButton.addEventListener('change', function(e){
+  var file = e.target.files[0];
+  var storageRef = firebase.storage().ref('img/'+file.name);
+  var task = storageRef.put(file);
+  task.on('state_changed', function progress(snapshot) {
+    var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+    uploader.value = percentage;
+
+  }, function error(err) {
+
+
+  },function complete() {
+
+  });
+});  
+ 
+ 
+</script>
+
+<script src="fileup.js">
+</script>
+
+<script>
+// Create a reference under which you want to list
+var listRef = storageRef.child('files/uid');
+
+// Find all the prefixes and items.
+listRef.listAll()
+  .then((res) => {
+    res.prefixes.forEach((folderRef) => {
+      // All the prefixes under listRef.
+      // You may call listAll() recursively on them.
+    });
+    res.items.forEach((itemRef) => {
+      // All the items under listRef.
+    });
+  }).catch((error) => {
+    // Uh-oh, an error occurred!
+  });
+</script>
 </body>
 </html>
